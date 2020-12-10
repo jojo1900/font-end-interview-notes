@@ -220,7 +220,7 @@ Sub.prototype = {
     getSubVal(){
         return this.subProperty
     },
-    someOtherMethod(){
+    someOtherMethod(){ 
         return false;
     }
 }
@@ -228,4 +228,147 @@ Sub.prototype = {
 - 原型链的问题：
   1. 对于引用类型的属性，会造成实例之间的共享，一个改变另一个也改变
   2. 子类型在实例化时，不能向构造函数传参
-  3.  
+
+### 11.4盗用构造函数
+    在子对象的构造函数中，通过call/apply改变this，调用父对象的构造函数
+
+### 11.5组合继承（盗用构造函数+原型链）
+- 弥补了原型链和盗用构造函数的不足，是JavaScript中使用最多的继承模式。
+```Javascript
+function Super(name){
+    this.name = name;
+    this.colors = ["red","blue"]
+}
+Super.prototype.sayName = function(){
+    console.log(this.name);
+}
+
+function Sub(name,age){
+    Super.call(this,name);
+    this.age = age
+}
+
+Sub.prototype = new Super()
+Sub.prototype.sayAge = function(){
+    console.log(this.age);
+}
+ let instance1 = new Sub('yadong',11)
+ instance1.colors.push("black")
+ console.log(instance1.colors);//[ 'red', 'blue', 'black' ]
+
+ let instance2 = new Sub('yun',22)
+ instance2.colors.push("orange")
+ console.log(instance2.colors);//[ 'red', 'blue', 'orange' ]
+
+```
+## 11.5 原型式继承
+- 在原有对象的基础上创建一个新的对象。
+```Javascript
+//对传入的对象执行一次浅复制
+function object(o){
+    function F(){}
+    F.prototype = o
+    return new F()
+}
+
+let person = {
+    name:'1',
+    friends:["a","b","c"]
+}
+
+let person1 = object(person)
+person1.friends.push('d')
+console.log(person1.friends);
+```
+- 相当于Object.create()
+- 适用于不需要单独创建构造函数，但是需要对象之间信息共享的场合。并且，引用类型的值会共享的。
+
+
+## 11.6 寄生式继承
+- 创建，增强，返回
+
+## 11.7寄生式组合继承
+- 组合继承的效率问题：组合式继承会<font color="red">调用两次</font>Super的构造函数，同时会导致，在Sub的prototype和实例instance中，age、name<font color="red">属性有两个</font>。
+- 通过寄生式组合继承 来解决。
+```Javascript
+//对传入对象进行一次浅复制，然后返回
+function object(o){
+    function F(){}
+    F.prototype = o
+    return new F()
+}
+//寄生方式继承
+function inheritPrototype(subType, superType){
+    let prototype = object(superType.prototype)//创建
+    prototype.constructor = subType//增强
+    subType.prototype = prototype//赋值
+}
+
+function Super(name){
+    this.name = name;
+    this.colors = ["red","blue"]
+}
+Super.prototype.sayName = function(){
+    console.log(this.name);
+}
+
+function Sub(name,age){
+    Super.call(this,name);
+    this.age = age
+}
+
+// Sub.prototype = new Super()，不再用这种方式
+inheritPrototype(Sub,Super)
+Sub.prototype.sayAge = function(){
+    console.log(this.age);
+}
+```
+
+## 12 类
+### 12.1 类的定义
+```Javascript
+//类声明
+class Person{
+
+}
+//类表达式
+let Person = class {
+
+}
+```
+- 类受块级作用域限制
+- 没有变量提升
+- 
+
+## 13 客户端存储
+### 13.1 cookie 
+- cookie 由服务端在response中，set-cookie字段，设置cookie的值，cookie保存在浏览器，每次向服务器发送请求时，会带上cookie字段
+- cookie 有大小限制、大约为4kb，有数量限制、每个域的cookie数量有限、可以设置过期时间、设置为负数时自动失效。名称和值都必须经过URL编码；可以设置域和路径，；有一个secure字段，设置后，只在https协议下才会携带cookie。
+
+### 13.2 session
+1. 用户输入账号密码登录，服务端查找用户数据，作为一个session，然后服务端把session保存下来（redis、内存、普通数据库）。
+2. 服务端返回给response，其中set-cookie:sessionID
+3. 每次请求，携带着cookie，内容是sessionID，根据sessionID去session库中取得用户信息。
+4. 接口处理和返回。
+
+### 13.2.1 session方案的问题
+- 需要服务端存储会话数据，当服务端是集群时，由于负载均衡，session不一定存在于这台服务器上，就无法拿到，
+- 解决的方法时：1 session集中存储，集中查询。2.设置负载均衡，来自相同IP的请求发送到同一台服务器处理，但是这样负载均衡就没有用了。
+
+### 13.3 token
+1. 用户输入账号密码，在服务端校验。
+2. 成功后生成一个token，内容为token的配置和用户的登录信息。
+3. 把token set到浏览器的cookie里（或者storage里），每次请求都会携带token。
+4. 接口校验token，执行接口。
+
+### 13.4 token和session的不同
+1. 服务端不需要存储token。
+
+### 13.5 token的设置 JWT（JSON Web Token）
+- 把token分为三段，头部、负载和校验，以“.”分隔。校验是对前面两段加密得到的校验码，防止token篡改。
+- 根据有效时间的长短，分为Access token 和 Refresh token。Access token时效较短、Refresh token 时效长。登录后，先得到一个Refresh token，根据Refresh token 签发一个 Access token，用来请求接口， Access token过期后，用 Refresh token 再签发一个新的 Access token 。 Refresh token也过期的话，重新登录。
+
+## 14 ES6模块
+ -  看完了，不想记。
+### 14.1 
+
