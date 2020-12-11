@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <button class="debounce">测试防抖</button>
+        <button class="throttle">测试节流</button>
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.js"></script>
+    <script>
+        function handleClick(){
+            console.log("处理点击事件",this,event);
+        }
+        document.querySelector(".debounce").onclick =_.debounce(handleClick,2000) 
+        document.querySelector(".throttle").onclick =_.throttle(handleClick,2000) 
+
+    </script>
+</body>
+</html>
