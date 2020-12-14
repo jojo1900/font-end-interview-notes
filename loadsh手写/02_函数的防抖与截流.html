@@ -12,11 +12,41 @@
     </div>
     <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.js"></script>
     <script>
-        function handleClick(){
+        function handleClick(event){
             console.log("处理点击事件",this,event);
         }
-        document.querySelector(".debounce").onclick =_.debounce(handleClick,2000) 
-        document.querySelector(".throttle").onclick =_.throttle(handleClick,2000) 
+        document.querySelector(".debounce").onclick =debounce(handleClick,2000) 
+        document.querySelector(".throttle").onclick =throttle(handleClick,2000) 
+        
+        //节流函数
+        function throttle(callback,delay){
+            // pre要定义在外面
+            let pre = 0
+            //记得传event给callback函数用
+            return function(event){
+                let cur = Date.now()
+                if(cur-pre>delay){
+                    callback.call(this,event)
+                    pre = cur
+                }
+            }
+        }
+
+        //防抖函数，对于当前事件来说，delay时间内，没有下一次时间发生时调用callback，如果有下次事件发生，重新
+        function debounce(callback,delay){
+            
+            return function(event){
+                //对于当前事件来说，如果有timeoutId，说明上一次事件正在等待执行，等待事件不超过delay，需要取消上次事件的执行。当前事件进入等待
+                //如果没有timeoutID，则当前事件进入等待，等待delay时间后，如果没被取消，说明没有下一次事件，则当前事件自动执行。
+                if(callback.hasOwnProperty('timeoutId')){
+                    clearTimeout(callback.timeoutId)
+                }
+                callback.timeoutId = setTimeout(() => {
+                    callback.call(this,event)
+                    delete callback.timeoutId
+                }, delay);
+            }
+        }
 
     </script>
 </body>
