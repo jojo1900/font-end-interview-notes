@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "debug Leetcode",
-            "program": "${workspaceFolder}/leetcode/11.盛最多水的容器.js",
+            "program": "${workspaceFolder}/leetcode/287.寻找重复数.js",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
