@@ -10,9 +10,15 @@
 <body>
     <div id="cicle" style="width: 20px;height: 20px; border-radius: 10px;background-color: black;"></div>
     <script>
-        document.addEventListener("click",(e)=>{
-            console.log(e);
-        })
+        var a = {
+            n: 1
+        };
+        var b = a;
+        a.x = a = {
+            n: 2
+        };
+        console.log(a.x)
+        console.log(b.x)
     </script>
 </body>
 
