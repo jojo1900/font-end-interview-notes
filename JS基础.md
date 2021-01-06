@@ -237,7 +237,7 @@ Sub.prototype = {
 ```Javascript
 function Super(name){
     this.name = name;
-    this.colors = ["red","blue"]
+    this.colors = ["red","blue"]  
 }
 Super.prototype.sayName = function(){
     console.log(this.name);

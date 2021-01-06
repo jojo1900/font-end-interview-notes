@@ -10,38 +10,22 @@
 <body>
 
     <script>
-        function executor(resolve, reject) {
-            let rand = Math.random();
-            console.log(1)
-            console.log(rand)
-            if (rand > 0.5)
-                resolve()
-            else
-                reject()
+        //手写map
+        Array.prototype.map = function (callback) {
+            const result = []
+            for (let index = 0; index < this.length; index++) {
+                const item = this[index];
+                const temp = callback(item, index)
+                result.push(temp)
+            }
+            return result
         }
-        var p0 = new Promise(executor);
+        const arr = [1, 3, 6, 9, 15, 18, 19, 14]
+        console.log(arr.map(function (item) {
+            return item + 10
+        }));
 
-        var p1 = p0.then((value) => {
-            console.log("succeed-1")
-            return new Promise(executor)
-        })
-
-
-        var p3 = p1.then((value) => {
-            console.log("succeed-2")
-            return new Promise(executor)
-        })
-
-        var p4 = p3.then((value) => {
-            console.log("succeed-3")
-            return new Promise(executor)
-        })
-
-
-        p4.catch((error) => {
-            console.log("error")
-        })
-        console.log(2)
+        //手写 reduce
     </script>
 </body>
 
