@@ -15,11 +15,31 @@
         </div>
     </div>
     <script>
-        let a = "111"
-        if(a.indexOf(1)!== -1){
-            console.log(1);
+        const hidden = ['foo','bar']
+        const target = {
+            foo:1,
+            bar:2,
+            baz:3
         }
+        const proxy = new Proxy(target,{
+            get(target,property){
+                if (hidden.indexOf(property)> -1){
+                    return undefined
+                }else{
+                    return Reflect.get(...arguments)
+                }
+            },
+            has(target,property){
+                if(hidden.includes(property)){
+                    return undefined
+                }else{
+                    return Reflect.has(...arguments)
+                }
+            }
+        })
+        proxy.baz = 'baz'
+        console.log(target.baz);
     </script>
 </body>
 
-</html>
+</html>  

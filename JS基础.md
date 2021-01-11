@@ -17,7 +17,7 @@
 - onmouseenter
 - onmouseleave
 
-## 3.typeof 和 instanceOf的区别
+## 3.typeof 和 instanceOf 的区别
 - JS的八个内置数据类型：undefined null boolean number string symbol BigInt object ,除object外，其余统称为基本类型。
 - 虽然对于函数myFunc来说，typeof(myFunc) =>'function'，但是function并不是JavaScript的内置类型，function只是object的一个子类型。
 - typeof操作符返回的是一个内置类型，通过检测低三位返回。
@@ -533,3 +533,81 @@ accept-language: zh-CN,zh
  ### 渲染进程内的任务调度方案：动态调度策略
  > ![avatar](https://static001.geekbang.org/resource/image/3c/f5/3cc95247daae7f90f0dced017d349af5.png)
  > 同时，连续多次执行高优先级的任务后，会执行一次低优先级的任务。防止低优先级的任务饿死。
+
+## JS元编程
+ ### 元编程的三个特点
+ - 自省：可以访问自身的属性
+ - 自我修改：可以修改自身的属性
+ - 拦截：可以拦截外部对其的访问
+反射是实现元编程的一个分支。
+## 代理和反射 proxy reflect
+  ### 代理
+
+  ### Reflect中被拦截的方法
+  - get()
+  - set()
+  - has()
+  - defineProperty
+  - getOwnPropertyDescriptor
+  - deleteProperty()
+  - ownKeys()
+  - getPrototypeOf()
+  - setPrototypeOf()
+  - isExtensible()
+  - preventExtensions()
+  - apply()
+  - construct()
+
+  ### 可以实现的一些编程模式（应用）
+  - 跟踪属性访问
+  - 隐藏属性：代理要访问的对象，如果访问的属性是要被隐藏的，则return undefined
+  ```Javascript
+        const hidden = ['foo','bar']
+        const target = {
+            foo:1,
+            bar:2,
+            baz:3
+        }
+        const proxy = new Proxy(target,{
+            get(target,property){
+                if (hidden.indexOf(property)> -1){
+                    return undefined
+                }else{
+                    return Reflect.get(...arguments)
+                }
+            },
+            has(target,property){
+                if(hidden.includes(property)){
+                    return undefined
+                }else{
+                    return Reflect.has(...arguments)
+                }
+            }
+        })
+        console.log(target.foo); //1
+        console.log(proxy.foo); // undefined
+        console.log(proxy.bar); // undefined
+        console.log(proxy.baz); // 3    
+
+  ```
+  - 属性验证：所有的赋值操作都会触发set()捕获器，根据所赋的值决定是否允许赋值。
+  - 函数与构造函数的参数验证，通过apply()捕获器，对函数的参数进行审查，可以让函数指接受某种类型的值。
+  - 数据绑定与可观察对象
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 我不是生活在昨天，不是生活在明天，而是生活在每一个当下的瞬间片刻。
+ 我的追求应当是每一个瞬间的快乐。让我感到快乐的，不是盛大的狂欢，因为狂欢之后是比狂欢更深刻的空虚。
+ 让我感到快乐的，是和爱人依偎、和亲人朋友交谈、是学习新东西、是创造的快乐、是传播这份快乐得到的快乐。
