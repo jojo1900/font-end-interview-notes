@@ -10,36 +10,22 @@
 <body>
     <div id="c">
         <div id="cicle">
-            <div>11</div>
-            <div>22</div>
+            <!-- <div>11</div>
+            <div>22</div> -->
         </div>
     </div>
     <script>
-        const hidden = ['foo','bar']
-        const target = {
-            foo:1,
-            bar:2,
-            baz:3
+        let a = null
+        if(a){
+            console.log();
         }
-        const proxy = new Proxy(target,{
-            get(target,property){
-                if (hidden.indexOf(property)> -1){
-                    return undefined
-                }else{
-                    return Reflect.get(...arguments)
-                }
-            },
-            has(target,property){
-                if(hidden.includes(property)){
-                    return undefined
-                }else{
-                    return Reflect.has(...arguments)
-                }
-            }
-        })
-        proxy.baz = 'baz'
-        console.log(target.baz);
     </script>
+
+    <style >
+        #c {
+            height: 1080px;
+        }
+    </style>
 </body>
 
 </html>  
