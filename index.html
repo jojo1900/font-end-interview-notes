@@ -10,29 +10,22 @@
 <body>
     <div id="c">
         <div id="cicle">
-            <!-- <div>11</div>
-            <div>22</div> -->
+            <canvas id="canvas" width="600" height="600"></canvas>
         </div>
     </div>
     <script>
-        function Foo() {
-            this[100] = 'test-100'
-            this[1] = 'test-1'
-            this["B"] = 'bar-B'
-            this[50] = 'test-50'
-            this[9] = 'test-9'
-            this[8] = 'test-8'
-            this[3] = 'test-3'
-            this[5] = 'test-5'
-            this["A"] = 'bar-A'
-            this["C"] = 'bar-C'
-        }
-        var bar = new Foo()
+        var a = [];
 
+        function f() {
+            for (var i = 0; i < 10; i++) {
+                a[i] = function () {
+                    console.log(i)
+                }
+            };
+            a[2]();
 
-        for (key in bar) {
-            console.log(`index:${key}  value:${bar[key]}`)
         }
+        f()
     </script>
 
     <style>
