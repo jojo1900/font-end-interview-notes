@@ -695,6 +695,49 @@ foo3()//不会报错，但是页面会卡住。
 ## v8 快慢属性、隐藏类、内联缓存总结(blog)
 
 ## v8 中数组的底层实现
+1. V8 数组继承自 Object，分为快数组和慢数组，快数组用一块连续的内存存储。慢数组用Hash表存储。
+2. 2.1 快数组==》慢数组的条件：1. 快数组扩充为原来的三倍以上，可以认为其比hash表占用的空间更大 2. 新增的索引比原索引大1024.这两种情况下，快数组=》慢数组。
+2. 2.2 慢数组=》快数组的条件：慢数组=》快数组能够节省50%以上的空间时。
+3. 数组的动态扩容和收缩：
+   - 初始化时数组被分配好4字节的空间
+   - 容量不够时需动态扩容， 原空间+原空间*2+16
+   - 当数组容量>=2*length时，进行收缩，通过标记等待垃圾回收回收
+
+## MutationObserver的实现
+
+## 宏任务、微任务
+ ### 宏任务
+ - setTimeout、各种事件属于宏任务
+ - 宏任务在新的任务中执行
+  
+ ### 微任务
+ - promise 的resolve、reject 以及 使用mutationobserver 用JS修改DOM属于微任务。
+
+## async/await的实现--协程 (generator)
+- 先说一下 async await 的执行规则：
+```Javascript
+        function HaveResolvePromise() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(100)
+                }, 0);
+            })
+        }
+        async function getResult() {
+            console.log(1)
+            let a = await HaveResolvePromise()
+            console.log(a)
+            console.log(2)
+        }
+        console.log(0)
+        getResult()
+        console.log(3)
+// 0 1 3 100 2
+```
+遇到await时，会阻塞当前函数的执行，先去接下来的代码，知道 后面的表达式返回一个resolve。
+
+## 深入了解this
+
 
 ## TS 的笔记
 - 未声明类型的变量，定义的时候没有赋值。则以后都会被认为是any类型。

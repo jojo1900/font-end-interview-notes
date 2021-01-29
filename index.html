@@ -9,22 +9,33 @@
 
 <body>
     <div id="c">
-        <div id="cicle">
-            <canvas id="canvas" width="600" height="600"></canvas>
-        </div>
+        <div id="cicle"></div>
     </div>
     <script>
-        let point = {
-            x: 100,
-            y: 200
+        const num = {
+            a: 10,
+            add() {
+                debugger
+                return this.a + 2;
+            },
+            reduce: () => {
+                debugger
+                this.a - 2
+            }
         };
-        debugger
-        console.log(point);
+        console.log(num.add());
+        console.log(num.reduce());
     </script>
 
     <style>
-        #c {
-            height: 1080px;
+        #c {}
+
+        #c #cicle {
+            width: 0px;
+            height: 0px;
+            border-width: 10px;
+            border-style: solid;
+            border-color: red green blue brown;
         }
     </style>
 </body>
