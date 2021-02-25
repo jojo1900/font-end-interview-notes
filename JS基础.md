@@ -793,6 +793,27 @@ foo3()//不会报错，但是页面会卡住。
 1. 
 
 
+
+## 网站性能优化（Youtube-Chrome频道）
+- 图片的适配：响应式图像。根据设备的不同，加载不同大小的图像。（大于200k的图片可能是有问题的）
+  ``` Html
+   <picture>
+    <source srcset="homepage-person@desktop.png,
+                  homepage-person@desktop-2x.png 2x"       
+          media="(min-width: 990px)">
+    <source srcset="homepage-person@tablet.png,
+                  homepage-person@tablet-2x.png 2x" 
+          media="(min-width: 750px)">
+    <img srcset="homepage-person@mobile.png,
+               homepage-person@mobile-2x.png 2x" 
+       alt="Shopify Merchant, Corrine Anestopoulos">
+    </picture>
+  ```
+  - CSS中的背景图片优化：媒体查询选择合适大小的图片
+  - 压缩图片。适当降低图片的质量，可以大大减小图像的体积。
+  - 用正确的格式保存图片，选择Jpeg或者webg而不是Png。logo使用字体图像后者svg而不是Jpeg、png
+  - 尽量不要让脚本“script”的加载，阻塞HTML的渲染。可以使用 async defer  来加载脚本。或者监听load事件，在HTML加载完之后，创建一个DOM元素--script标签，再进行脚本的加载。
+  - 图片太多时，可以使用图像懒加载（预加载）的方法。
 ## TS 的笔记
 - 未声明类型的变量，定义的时候没有赋值。则以后都会被认为是any类型。
 - 如果赋值了，则会进行类型推论，以后不能改变类型。

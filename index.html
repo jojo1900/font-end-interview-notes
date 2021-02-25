@@ -11,6 +11,9 @@
     <div id="c">
         <div id="cicle"></div>
     </div>
+    <div id = "button" style="width: 200px;height: 200px;">
+        <button >111</button>
+    </div>
     <script>
         const num = {
             a: 10,
@@ -28,6 +31,10 @@
         console.log(num.add());
         console.log(num.reduce());
         console.log(num.showThis());
+        let btn = document.querySelector("#button")
+        btn.addEventListener('click',(e)=>{
+            console.log(111);
+        })
     </script>
 
     <style>
