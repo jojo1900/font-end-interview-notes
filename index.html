@@ -11,30 +11,29 @@
     <div id="c">
         <div id="cicle"></div>
     </div>
-    <div id = "button" style="width: 200px;height: 200px;">
-        <button >111</button>
-    </div>
     <script>
-        const num = {
-            a: 10,
-            add() {
-                return this.a + 2;
-            },
-            reduce: () => {
-            
-                this.a - 2
-            },
-            showThis:function(){
-                console.log(this);
-            }
-        };
-        console.log(num.add());
-        console.log(num.reduce());
-        console.log(num.showThis());
-        let btn = document.querySelector("#button")
-        btn.addEventListener('click',(e)=>{
-            console.log(111);
-        })
+
+        const task = (cb) => {
+           const mc = new MessageChannel()
+           mc.port1.postMessage(null);
+           mc.port2.addEventListener("message", () => {
+               cb();
+           },{once:true});
+           mc.port2.start()
+        }
+        const microTask = (cb) => {
+            //需要在then中调用，才是微任务，在resolve中调用，是同步的，不会事件循环
+            Promise.resolve().then(() => {
+                cb()
+            })   
+        }
+        const microTask1 = (cb) => {
+            queueMicrotask(cb)
+        }
+        //只有node环境才有
+        const nanoTask = (cb) => {
+            process.nextTick(cb)
+        }
     </script>
 
     <style>

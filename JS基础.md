@@ -538,13 +538,13 @@ accept-language: zh-CN,zh
 
 ###  Cache-Control 的可选字段
 > - Cache-Control:no-cache：强制客户端直接向服务器发送请求,也就是说每次请求都必须向服务器发送。服务器接收到  请求，然后判断资源是否变更，是则返回新内容，否则返回304，未变更。这个很容易让人产生误解，使人误以为是响应不被缓存。实际上Cache-Control: no-cache是会被缓存的，只不过每次在向客户端（浏览器）提供响应数据时，缓存都要向服务器评估缓存响应的有效性。
-> - no-store:不缓存数据到本地
+> - no-store:不缓存数据到本地。
 > - private:只能被终端浏览器缓存。
 > - public:可以被所有用户缓存，包括终端和CDN等中间代理服务器。
 
 ### 协商缓存的实现
 >  1. Last-Modified/If-Modified-Since
-> - Last-Modified 表示本地文件最后修改日期，浏览器会在请求 header加上If-Modified-Since（上次返回的Last-Modified的值），询问服务器在该日期后资源是否有更新，有更新的话就会将新的资源发送回来
+>  > Last-Modified 表示本地文件最后修改日期，浏览器会在请求 header加上If-Modified-Since（上次返回的Last-Modified的值），询问服务器在该日期后资源是否有更新，有更新的话就会将新的资源发送回来
 
 -----
 > 2. ETag/If-None-Match（优先级高于 Last-Modified/If-Modified-Since ）
@@ -807,11 +807,23 @@ foo3()//不会报错，但是页面会卡住。
     > ![avatar](https://static001.geekbang.org/resource/image/71/e8/718e3a1a1a7927302b6a0f836409e8e8.jpg)
     
 4. 客户端经过三次握手与服务端建立TCP连接。
-   - 4.1 
+   - 4.0 服务端的程序一般允运行在容器中，容器监听着80端口（https协议监听的是443端口）
+   - 4.1 客户端发送一个建立连接的请求，包含SYN = 1 和seqX（序列号）
+   - 4.2 服务端（server）接收到客户端（client）的请求后，返回一个 SYN = 1 ack = (seqX+1),ACK = 1，和一个自己的seqY 
+   - 4.3 客户端接收到服务端的响应后，返回一个ACK 和 ack = seqY+1,和自己的序列号seqX = seqX + 1（）
+   - 4.4 之后开始进行数据的传输
+   - > Q : 为什么三次握手不是两次或者四次握手：
+   - > A : 四次握手太多，没有必要。两次握手的问题是，如果客户端发给服务端（第一次握手）的请求报文，在网络中经过比较长的延迟（已经失效）后，到达服务端，服务端相应后，如果是两次握手，那么此时建立TCP连接，服务端开始等待客户端的报文，但是客户端是不会发报文给服务端的，会造成服务端资源的浪费。
+    - > ![avatar](https://static001.geekbang.org/resource/image/c0/08/c067fe62f49e8152368c7be9d91adc08.jpg)
+  
 5. 
 
-
-
+## 前端渲染大量数据（10w）
+> 假设浏览器内存有10w条数据（长列表），如果做显示渲染的优化
+> 1. 虚拟列表
+    > > 核心思想是，只渲染视口附近的数据。根据滚动条的滚动，算出 真实需要渲染的列表realArray，在数据存储列表storageArray中的 startIndex 和 endIndex 。然后动态增删 realArray.
+> 2. 时间分片（适合样式简单的DOM节点）
+    > > 核心思想是，每次渲染少量的节点，直到渲染结束。用setTimeout可能会导致闪屏现象，因为每个设备的fps不同，而setTimeout的间隔时间并不准确。可以使用requestAnimationFrame，它能保证回调函数在屏幕每一次的刷新间隔中只被执行一次，这样就不会引起丢帧现象。还可以使用DocumentFragment，向其中插入节点不会加入到DOM树中，所以不会有渲染性能的损耗。 
 ## 网站性能优化（Youtube-Chrome频道）
 - 图片的适配：响应式图像。根据设备的不同，加载不同大小的图像。（大于200k的图片可能是有问题的）
   ``` Html
@@ -832,6 +844,9 @@ foo3()//不会报错，但是页面会卡住。
   - 用正确的格式保存图片，选择Jpeg或者webg而不是Png。logo使用字体图像后者svg而不是Jpeg、png
   - 尽量不要让脚本“script”的加载，阻塞HTML的渲染。可以使用 async defer  来加载脚本。或者监听load事件，在HTML加载完之后，创建一个DOM元素--script标签，再进行脚本的加载。
   - 图片太多时，可以使用图像懒加载（预加载）的方法。
+
+## （宏）任务 task、微任务macroTask、纳米任务nanoTask (HTTP 203 Scheduling Tasks )
+- Task 最好用
 ## TS 的笔记
 - 未声明类型的变量，定义的时候没有赋值。则以后都会被认为是any类型。
 - 如果赋值了，则会进行类型推论，以后不能改变类型。
