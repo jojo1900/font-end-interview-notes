@@ -12,28 +12,20 @@
         <div id="cicle"></div>
     </div>
     <script>
-
-        const task = (cb) => {
-           const mc = new MessageChannel()
-           mc.port1.postMessage(null);
-           mc.port2.addEventListener("message", () => {
-               cb();
-           },{once:true});
-           mc.port2.start()
+        var myObj = {
+            name: "极客时间",
+            showThis: function () {
+                console.log(this)
+                var bar = () => {
+                    this.name = "极客邦"
+                    console.log(this)
+                }
+                bar()
+            }
         }
-        const microTask = (cb) => {
-            //需要在then中调用，才是微任务，在resolve中调用，是同步的，不会事件循环
-            Promise.resolve().then(() => {
-                cb()
-            })   
-        }
-        const microTask1 = (cb) => {
-            queueMicrotask(cb)
-        }
-        //只有node环境才有
-        const nanoTask = (cb) => {
-            process.nextTick(cb)
-        }
+        myObj.showThis()
+        console.log(myObj.name)
+        console.log(window.name)
     </script>
 
     <style>
