@@ -232,7 +232,7 @@ Sub.prototype = {
 ### 11.4盗用构造函数
     在子对象的构造函数中，通过call/apply改变this，调用父对象的构造函数
 
-### 11.5组合继承（盗用构造函数+原型链）
+### 11.5组合继承（盗用构造函数+原型链 经典）
 - 弥补了原型链和盗用构造函数的不足，是JavaScript中使用最多的继承模式。
 ```Javascript
 function Super(name){
@@ -703,7 +703,11 @@ accept-language: zh-CN,zh
   - 全局执行上下文
   - 全局作用域
   - 时间循环系统
-  - 
+
+## 执行上下文：
+- 变量对象（Variable object）：存放函数内声明的变量（包括形参和函数名等）和函数
+- 作用域链
+- this
 ## 几个任务的执行结果
 ```Javascript
 function foo1(){

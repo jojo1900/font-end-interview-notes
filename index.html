@@ -12,20 +12,17 @@
         <div id="cicle"></div>
     </div>
     <script>
-        var myObj = {
-            name: "极客时间",
-            showThis: function () {
-                console.log(this)
-                var bar = () => {
-                    this.name = "极客邦"
-                    console.log(this)
-                }
-                bar()
+        var scope = "global scope";
+    
+        function checkscope() {
+            var scope = "local scope";
+
+            function f() {
+                return scope;
             }
+            return f();
         }
-        myObj.showThis()
-        console.log(myObj.name)
-        console.log(window.name)
+        console.log( checkscope());
     </script>
 
     <style>
