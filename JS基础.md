@@ -705,9 +705,9 @@ accept-language: zh-CN,zh
   - 时间循环系统
 
 ## 执行上下文：
-- 变量对象（Variable object）：存放函数内声明的变量（包括形参和函数名等）和函数
-- 作用域链
-- this
+- 变量对象（Variable object）：存放函数内声明的变量（包括形参和函数名等）和函数，函数被执行时，会被激活，变为活动对象（AO）。
+- 作用域链。
+- this。
 ## 几个任务的执行结果
 ```Javascript
 function foo1(){
