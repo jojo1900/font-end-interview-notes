@@ -12,17 +12,20 @@
         <div id="cicle"></div>
     </div>
     <script>
-        var scope = "global scope";
-    
-        function checkscope() {
-            var scope = "local scope";
-
-            function f() {
-                return scope;
-            }
-            return f();
+        function f(a, b) {
+            this.x = a + b
+            console.log(a, b, this);
         }
-        console.log( checkscope());
+        Function.prototype.apply = function apply(obj, ...args) {
+            obj.tempFn = this
+            let result = obj.tempFn(...args)
+            delete obj.tempFn
+            return result
+        }
+        f(1, 2)
+        let o = {}
+        f.call(o, 1, 2)
+
     </script>
 
     <style>

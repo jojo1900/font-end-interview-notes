@@ -23,7 +23,11 @@
 - typeof操作符返回的是一个内置类型，通过检测低三位返回。
 - instanceOf 用来比较一个对象是否是某个构造函数的实例，只能作用于对象，不能作用于基本数据类型;
 - instanceof原理： 检测 constructor.prototype是否存在于参数 object的 原型链上。
-- instanceof 查找的过程中会遍历object的原型链，直到找到 constructor 的 prototype ,如果查找失败，则会返回false，告诉我们，object 并非是 constructor 的实例。
+- A instanceof B 查找的过程中会遍历object的原型链，直到找到 构造函数 的 prototype ,如果查找失败，则会返回false，告诉我们，object 并非是 constructor 的实例。其实就是一直判断
+  ``` javascript
+    A.__proto__ === B.prototype?? return true: A = A.__proto__ 
+    return false
+  ```
 
 - Object.prototype.toString.call()
 
@@ -708,6 +712,67 @@ accept-language: zh-CN,zh
 - 变量对象（Variable object）：存放函数内声明的变量（包括形参和函数名等）和函数，函数被执行时，会被激活，变为活动对象（AO）。
 - 作用域链。
 - this。
+## 一个函数执行的过程：
+```javaScript
+var scope = "global scope";
+function checkscope(){
+    var scope2 = 'local scope';
+    return scope2;
+}
+checkscope();
+```
+1. checkscope 函数被创建，保存作用域链到 内部属性[[scope]]
+   
+   ```javascript
+        checkscope.[[scope]] = [
+            globalContext.VO
+        ];
+    ```
+
+2. 执行函数，创建函数执行上下文，把函数上下文压入 上下文栈中。
+3. checkscope 函数并不立刻执行，开始做准备工作，第一步：复制函数[[scope]]属性创建作用域链。
+   ```javascript
+    checkscopeContext = {
+    Scope: checkscope.[[scope]],
+    }
+    ```
+4. 用arguments创建AO对象，随后初始化AO，加入形参、函数声明、变量声明。
+   ```javascript
+    checkscopeContext = {
+    AO: {
+        arguments: {
+            length: 0
+        },
+        scope2: undefined
+    }，
+    Scope: checkscope.[[scope]],
+    }
+   ```
+5. 将活动对象(AO)压入 checkscope 作用域链顶端
+   ```javascript
+    checkscopeContext = {
+        AO: {
+            arguments: {
+                length: 0
+            },
+            scope2: undefined
+        },
+        Scope: [AO, [[Scope]]]
+    }
+   ```
+6. 准备工作做完，开始执行函数，随着函数的执行，修改 AO 的属性值
+      ```javascript
+    checkscopeContext = {
+        AO: {
+            arguments: {
+                length: 0
+            },
+            scope2: 'local scope'
+        },
+        Scope: [AO, [[Scope]]]
+    }
+   ```
+7. 函数执行完毕，函数上下文从执行上下文栈中弹出
 ## 几个任务的执行结果
 ```Javascript
 function foo1(){
