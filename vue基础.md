@@ -78,3 +78,30 @@
 
 ## VNode 描述 DOM元素。
 - tag data children  key parent ...
+
+## 虚拟DOM
+- 用 JS的数据结构 来描述 DOM元素
+- tag（标签） data（事件、样式等）  children text(children 和 text 只会有一个) elem（vnode关联到的到真实的DOM） parent 、 key 
+
+## 虚拟DOM的好处：
+- 操作真实DOM的开销很大，使用虚拟DOM，节点发生改变后不会马上操作真实DOM进行更新，而是通过diff算法比较，找出节点的最小变化，再操作真实DOM进行更新。提高性能减少开销。
+## vue中的diff算法
+-  时间复杂度：O(n)
+-  只在同层之间比较
+-  判断是否是同一个节点sameNode：key相同,tag相同，inputType相同。如果是sameNode，会直接复用旧节点的elm（虚拟DOM到真实DOM的映射）。
+-  比较新旧两个节点，如果oldNode === newNode(并不是调用sameNode函数) 那么return true
+-  不然，会直接复用这个节点的elm，然后进行以下比较：如果新的有children，旧的没有children，那么清空旧的text，并生成新的节点的children；如果新的没有children，旧的有children，那么销毁旧的children，生成新的text，如果都是text，那么比较是否相同...；如果都是有children，那么updateChildren：这样递归下去。
+-  updateChildren:
+1. 对于新旧children，各创建一个头指针，一个尾指针
+2. 首先头和头比较是不是同一个节点，是的话指针移动
+3. 如果不是，尾和尾比较
+4. 如果还不是，那么头和尾比较
+5. 如果还不是，那么尾和头比较
+6. 如果都不是，那么 拿到新节点的key，判断是否在旧children里，
+> 1. 如果在，再判断是否是同一个节点，如果是，那么更新位置。
+> 2. 如果否，那么说明是一个新节点，生成一个新的node，插入到合适位置。
+
+## v-for 为什么要用key
+- 根据 diff 原理，设置了key之后，可以根据key判断 节点是否改变，未改变的话 则直接复用之前的节点，只需要移动。不需要操作DOM，节省开销，提升性能。
+- 不然的话，vue会默认以index作为key，key和tag一样，那么会复用这个节点，比如由于text值不同，会修改节点的值，然后操作一次DOM，开销很大。
+- 而且，在删除操作时，会造成误删除：Vue在更新vnode时，tag一样data一样时对node进行复用，如果你想删除第一个，不加key的话，那么vue经过比较，会删除掉最后一个。同理:key="index"也不行.更新前后的key都需要是唯一的。

@@ -12,7 +12,14 @@
         <div id="cicle"></div>
     </div>
     <script>
-        
+        function f(xx){
+            this.x = xx
+            return this
+        }
+        var x = f(5)
+        var y = f(6)
+        console.log(x.x);
+        console.log(y.x);
     </script>
 
     <style>
