@@ -12,14 +12,16 @@
         <div id="cicle"></div>
     </div>
     <script>
-        function f(xx){
-            this.x = xx
-            return this
+        function vc(){
+            this.data = {
+                a:1,
+                b:2
+            }
         }
-        var x = f(5)
-        var y = f(6)
-        console.log(x.x);
-        console.log(y.x);
+        const vc1 = new vc()
+        vc1.data.a = "aaa"
+        const vc2 = new vc()
+        console.log(vc2.data.a);
     </script>
 
     <style>
