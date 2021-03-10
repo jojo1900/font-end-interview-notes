@@ -13,12 +13,12 @@ var isPalindrome = function (x) {
     if (!Number.isInteger(x) || x < 0) {
         return false
     }
+    let reverse = 0
     let cur = x
-    let y = 0
-    while (cur > 0) {
-        y = y * 10 + cur % 10
-        cur = parseInt(cur / 10)
+    while(cur>0){
+        reverse = reverse * 10 + cur % 10
+        cur = Math.floor(cur /10) 
     }
-    return x === y
+    return reverse === x
 };
 // @lc code=end
