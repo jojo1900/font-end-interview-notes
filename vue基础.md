@@ -118,3 +118,109 @@
 
 ## v-model 的实现原理（手写）
 - 组件的 v-model 是 value属性和 input 事件的语法糖。
+
+## v-html 会导致的问题
+原理：innerHtml
+1. xss攻击。内容不可信，其中可能有script标签，或者拿去用户的cookie等信息
+2. 会替换掉标签内部的子元素。
+
+## Vue父子组件生命周期调用顺序
+1. 生成： 父 beforeCreate => 父 created => 父 beforeMounted => 子 beforeCreate => 子 created => 子 beforeMounted =>...递归孙子...=> 子 mounted => 父 mounted
+2. 更新：父 beforeUpdate => 子 beforeUpdate => 子 updated => 父 updated
+3. 销毁：同上
+
+## 组件间的通信方法：（必问）
+1. 父子间通信： 父=》子 props。子=》父： 子绑定$on $emit(手写)(发布订阅)
+2. $parent $children来改变
+3. 在父组件中提供数据，子组件进行消费：provide inject（写插件必备）
+4. 通过Ref获取组件实例
+5. event bus 跨组件通信 ，基于 $on $emit，相当于创建一个专门用于通信的组件
+6. Vuex进行状态管理
+
+## Vue mixin 抽离相同逻辑
+- mergeOptions：合并字段
+
+
+## 为什么使用异步组件
+1. 组件很大时，打包结果会很大。使用异步组件可以减少打包结果。
+2. 异步组件把组件定义变成函数，可以使用import语法，webpack打包时可以实现文件分割加载。
+
+## 作用域插槽
+1. 普通插槽：渲染父组件时，渲染插槽，渲染成虚拟节点，保存起来，当子组件初始化时，通过插槽属性将插槽替换。作用域是在父组件里。
+2. 作用域插槽：因为渲染位置是在子组件，作用域是在子组件里。
+
+##  keep-alive
+- 作用：缓存，只缓存slot的第一个组件
+- 属性：include[] exclude[]
+- 生命周期：activated（激活），deactivated
+- 实现原理：LRU算法(手写)
+
+## vue 常见的性能优化
+### 编码优化
+1. 不要将所有数据都放到data中，因为data中的数据都会进行Observe()，会收集相应的watcher，开销很大。不需要响应式的数据可以不放在return{}里。
+2. v-for 中，根据事件冒泡的原理，使用事件代理
+3. 单页面应用 使用 keep-alive组件，减少组件的重新渲染。
+4. 拆分组件，提高复用性，增加代码的可维护性，组件的粒度越小，每次重新渲染的就越少
+5. v-if 和 v-show 的正确使用
+6. key保证唯一
+7. 响应式数据尽量不要太深，尽量扁平化；如果数据只是初始化时用来渲染，可以使用 object.freeze，不再加getter和setter。
+8. 合理使用路由懒加载和异步组件
+9. 数据持久化时，要加防抖节流
+
+### Vue 加载性能优化
+1. 第三方模块按需导入
+2. 长列表优化：只加载可视区域附近（三屏），然后根据滚动条，动态加载数据 vue-virtual-scroll
+3. 图片懒加载 vue-lazyload 
+
+### 用户体验
+- app-skeleton 骨架屏
+- all-shell app壳
+- pwa 渐进式web应用（离线缓存）
+
+### SEO 优化
+- 预渲染插件
+- 服务端渲染 SSR
+
+### 打包优化
+- cdn拆分模块
+- 多线程打包 happypack
+- splitChunks 抽离公共文件
+- sourceMap 生成
+
+### 缓存、压缩
+- 客户端缓存 服务端缓存
+- 服务端gzip压缩
+
+## Vue 3.0 的优化
+1. TS 编写
+2. composition API 解决的问题：mixin的缺陷，更有条理，高耦合性
+3. proxy，初始化时不需要递归data
+4. vdom diff算法 ， 只渲染动态数据的部分
+
+## hash路由 和 history 路由
+- onhashchange(#)
+- history.pushState(h5.api) 可能导致的问题
+
+## vue-router的 导航守卫
+- 完整的导航解析流程：
+
+
+## vuex的工作原理
+
+## mutation和action的区别
+
+## transition组件
+
+## patch函数做了什么
+
+## 权限校验（按钮级校验、路由校验）
+
+## vue-lazyLoader的原理，手写伪代码
+
+## vue.set的原理
+
+## vue compail 的过程
+
+
+
+

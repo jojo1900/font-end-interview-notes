@@ -12,16 +12,12 @@
         <div id="cicle"></div>
     </div>
     <script>
-        function vc(){
-            this.data = {
-                a:1,
-                b:2
-            }
-        }
-        const vc1 = new vc()
-        vc1.data.a = "aaa"
-        const vc2 = new vc()
-        console.log(vc2.data.a);
+        let p = new Promise((reslove,reject)=>{
+            reslove("后")
+            console.log("先");
+        }).then((value)=>{
+            console.log(value);
+        })
     </script>
 
     <style>
