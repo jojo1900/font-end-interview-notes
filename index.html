@@ -12,26 +12,11 @@
         <div id="cicle"></div>
     </div>
     <script>
-        var longestCommonPrefix = function (strs) {
-            if (!strs) return "";
-            let len = strs.length
-            if (len === 1) return strs[0];
-            let res = strs[0]
-            for (let index = 1; index < strs.length; index++) {
-                const element = strs[index];
-                let lMin = Math.min(res.length, element.length)
-                for (let j = 0; j < lMin; j++) {
-                    if (j === lMin - 1) return "";
-                    if (res.slice(j) == element.slice(j)) {
-                        res = res.slice(j)
-                        break
-                    }
-                }
-            }
-
-            return res
-        };
-        let res = longestCommonPrefix(["flower", "flow", "flight"]
+        function f(){
+            // let k = [].shift.apply(arguments)
+            console.log(arguments);
+        }
+        f(1,2,3,4,123143)
     </script>
 
     <style>

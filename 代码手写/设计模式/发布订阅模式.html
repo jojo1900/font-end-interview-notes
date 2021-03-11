@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <button class="debounce">测试防抖</button>
+        <button class="throttle">测试节流</button>
+    </div>
+    <script>
+        // 我是一个卖大锅饭的食堂，我有四种菜供你订阅：红烧茄子，东坡肉，蚂蚁上树，四季豆，谁都可以订阅任意一个菜。某个菜做好了之后，我会用不同的方式通知顾客们。你也可以取消订阅。
+        let restaurant = {
+            clienlist:{}, //
+            
+            //点菜
+            on:function(dishName,fn){
+                if (!this.clienlist[dishName]) this.clienlist[dishName] = []
+                this.clienlist[dishName].push(fn)
+            },
+            //取消
+            off:function(dishName,fn){
+                let fns = this.clienlist[dishName]
+                if(!fns) return false
+                if(!fn) this.clienlist[dishName] = []
+                for (let i = 0; i < fns.length; i++) {
+                    if(fn = fns[i]){
+                        fns.splice(i,1)
+                    }
+                }
+            },
+            //菜好了，叫你吃
+            emit:function(){
+                let dishName = [].shift.call(arguments)
+                let fns = clienlist[dishName]
+                if(!fns || fns.length === 0){
+                    return false
+                }
+                fns.forEach(fn => {
+                    fn.apply(this,arguments)
+                });
+            }
+        }
+
+
+    </script>
+</body>
+</html>
