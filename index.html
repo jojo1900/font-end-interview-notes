@@ -12,11 +12,16 @@
         <div id="cicle"></div>
     </div>
     <script>
-        function f(){
-            // let k = [].shift.apply(arguments)
-            console.log(arguments);
+        function outer(){
+            let c = 1
+            function inner(){
+                let a = "111"
+                c = "dsad"
+            }
+            inner()
+            let d = 2
         }
-        f(1,2,3,4,123143)
+        outer(1,2,3,4,123143)
     </script>
 
     <style>
