@@ -221,6 +221,59 @@
 
 ## vue compail 的过程
 
+## vue-router
+ ### 动态路由
+ - /user/:id -- this.$route.params.id
+ - /user?id="11" ---this.$route.query.id
+ - * 匹配到所有的路由，最好放在最后，用于捕获404
 
+### 嵌套路由
+- 在 route 里配置 children
 
+### 编程式导航
+- router.push({ path: 'register', query: { plan: 'private' }})
+- router.push({ name: 'user', params: { userId }}) // -> /user/123
+- router.push({ path: '/user', params: { userId }}) // -> /user
+- 如果提供 path， 那么params将无效（query不受限制）
 
+- router.replace(location, onComplete?, onAbort?)；不会向history添加新纪录
+- router.go(n)
+
+### 命名视图
+```javascript
+<router-view class="view one"></router-view>
+<router-view class="view two" name="a"></router-view>
+<router-view class="view three" name="b"></router-view>
+const router = new VueRouter({
+  routes: [
+    {
+      path: '/',
+      components: {
+        default: Foo,
+        a: Bar,
+        b: Baz
+      }
+    }
+  ]
+})
+```
+
+### 路由传参 可以通过 props，将组件和路由解耦
+```javascript
+const User = {
+  props: ['id'],
+  template: '<div>User {{ id }}</div>'
+}
+const router = new VueRouter({
+  routes: [
+    { path: '/user/:id', component: User, props: true },
+
+    // 对于包含命名视图的路由，你必须分别为每个命名视图添加 `props` 选项：
+    {
+      path: '/user/:id',
+      components: { default: User, sidebar: Sidebar },
+      props: { default: true, sidebar: false }
+    }
+  ]
+})
+```
