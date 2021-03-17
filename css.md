@@ -2,3 +2,19 @@
 - 答题技巧 ：在我之前的项目中，这样的需求很常见，我当时是。。怎么做的，不过后来随着。。技术兴起，我发现这种也可以实现，比之前的方案有什么优点，后来还在社区看到。。。这种方案，虽然不常见，但是也可以实现
 
 1. 定位：
+
+
+## BFC
+### 块级格式化上下文
+###  触发：
+- 1. 绝对定位元素 position : absolute,fixed
+- 2. 浮动元素 float 不为 none的
+- 3. display 为 inline-block、table-cells、flex
+- 4. overflow 除了 visible 以外的值 (hidden、auto、scroll)
+### 作用：
+- 清除浮动
+- 防止外边距折叠
+- 阻止元素被浮动元素覆盖
+
+### CSS 优先级
+1. !important > 行内style > id选择器 > 类选择器 属性选择器 伪类 > 元素选择器 伪元素
