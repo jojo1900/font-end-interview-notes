@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. 第一种方法，通过高度进行判断
+        let imgs = [...document.getElementsByTagName("img")]
+        let n = 0
+        function lazyLoad(){
+            let innerHeight = window.innerHeight
+            let scrollTop = document.documentElement.scrollTop
+            for (let i = n; i < imgs.length; i++) {
+                if (imgs[i].offsetHeight < innerHeight + scrollTop){
+                    imgs[i].scr = imgs[i].getAttribute("data-scr")
+                    n += 1
+                }
+            }
+        }
+        window.addEventListener("scroll",lazyLoad) //可以再加个节流函数
+
+        // 第二种写法，使用interscrtion API
+        if(IntersectionObserver){
+            let lazyImgObs = new IntersectionObserver((entrys,observer)=>{
+                entrys.forEach((entry,index)=>{
+                    let curImg = entry.target
+                    if (entry.intersectionRatio > 0){
+                        curImg.src = curImg.getAttribute("data-src")
+                        lazyImgObs.unobserve(curImg)
+                    }
+                })
+            })
+        }
+        lazyImgObs(imgs) 
+    </script>
+</body>
+</html>
