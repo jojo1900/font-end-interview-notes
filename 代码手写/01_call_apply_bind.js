@@ -15,9 +15,11 @@ Function.prototype.call = function call(obj, ...args){
     if(obj === undefined || obj === null){
         obj = window
     }
-    obj.tempFn = this
+    //保证新增的属性唯一，防止覆盖其他属性
+    let tempFn = Symbol("tempFn")
+    obj[tempFn] = this
     let result = obj.tempFn(...args)
-    delete obj.tempFn
+    delete obj[tempFn]
     return result
 }
 // 手写apply
