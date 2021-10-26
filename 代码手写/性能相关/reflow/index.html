@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .color {
+        width: 200px;
+        height: 200px;
+        background: blue;
+      }
+      .transform {
+        animation: 3s linear infinite rotate;
+      }
+      @keyframes rotate {
+        0% {
+          transform: rotate(0);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      window.addEventListener('load', () => {
+        const color = window.document.querySelector('.color');
+        console.log(color.className);
+        color.className += ' transform';
+        console.log(color.className);
+      });
+    </script>
+    <div>
+      <div class="color"></div>
+    </div>
+  </body>
+</html>

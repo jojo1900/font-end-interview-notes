@@ -8,25 +8,35 @@
 </head>
 
 <body>
-    <div id="c">
-        <div id="cicle"></div>
+    <div class="container">
+        <span class="c1">123</span>
+        <span class="c2">2</span>
     </div>
     <script>
-        function outer(){
-            let c = 1
-            function inner(){
-                let a = "111"
-                c = "dsad"
-            }
-            inner()
-            let d = 2
-        }
-        outer(1,2,3,4,123143)
     </script>
 
     <style>
+        .container {}
 
+        .container .c1 {
+            font-size: 47px;
+            font-family: Tajawal Black;
+            font-weight: bold;
+            font-style: italic;
+            color: #65ACED;
+            line-height: 68px;
+            background: linear-gradient(0deg, #FFC378 0%, #FFFFFF 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
+        .container .c2 {
+            font-size: 24px;
+            font-family: Tajawal;
+            font-weight: bold;
+            color: #FFFFFF;
+            line-height: 36px;
+        }
     </style>
 </body>
 
