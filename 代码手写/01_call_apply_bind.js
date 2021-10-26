@@ -1,18 +1,18 @@
-function fn(a,b){
+function fn(a, b) {
     this.x = 3
-    console.log(a,b,this);
+    console.log(a, b, this);
 }
 
-fn(1,2)
-const obj = {m:0}
-fn.call(obj,1,2)
-fn.apply(obj,[1,2])
+fn(1, 2)
+const obj = { m: 0 }
+fn.call(obj, 1, 2)
+fn.apply(obj, [1, 2])
 //手写call
 //使用时都是fn.call，所以call内部的this，就是fn，
 //要以指定的obj为this执行fn，则用 obj调用一个函数即可，这个函数和fn也就是call内部的this是同一个
 //同时需要处理obj 为null或未定义的情况，以及删除obj定义的临时函数。
-Function.prototype.call = function call(obj, ...args){
-    if(obj === undefined || obj === null){
+Function.prototype.call = function call(obj, ...args) {
+    if (obj === undefined || obj === null) {
         obj = window
     }
     //保证新增的属性唯一，防止覆盖其他属性
@@ -23,27 +23,27 @@ Function.prototype.call = function call(obj, ...args){
     return result
 }
 // 手写apply
-function getGlobalObject(){
+function getGlobalObject() {
     return this;
 }
-Function.prototype.apply = function apply(thisArg, argsArray){ // `apply` 方法的 `length` 属性是 `2`。
+Function.prototype.apply = function apply(thisArg, argsArray) { // `apply` 方法的 `length` 属性是 `2`。
     // 1.如果 `IsCallable(func)` 是 `false`, 则抛出一个 `TypeError` 异常。
-    if(typeof this !== 'function'){
+    if (typeof this !== 'function') {
         throw new TypeError(this + ' is not a function');
     }
 
     // 2.如果 argArray 是 null 或 undefined, 则
     // 返回提供 thisArg 作为 this 值并以空参数列表调用 func 的 [[Call]] 内部方法的结果。
-    if(typeof argsArray === 'undefined' || argsArray === null){
+    if (typeof argsArray === 'undefined' || argsArray === null) {
         argsArray = [];
     }
-    
+
     // 3.如果 Type(argArray) 不是 Object, 则抛出一个 TypeError 异常 .
-    if(argsArray !== new Object(argsArray)){
+    if (argsArray !== new Object(argsArray)) {
         throw new TypeError('CreateListFromArrayLike called on non-object');
     }
 
-    if(typeof thisArg === 'undefined' || thisArg === null){
+    if (typeof thisArg === 'undefined' || thisArg === null) {
         // 在外面传入的 thisArg 值会修改并成为 this 值。
         // ES3: thisArg 是 undefined 或 null 时它会被替换成全局对象 浏览器里是window
         thisArg = getGlobalObject();
@@ -61,8 +61,8 @@ Function.prototype.apply = function apply(thisArg, argsArray){ // `apply` 方法
 };
 
 
-Function.prototype.bind = function(obj,...args){
-    return (...args2)=>{
-        return  this.call(obj,...args,...args2)
+Function.prototype.bind = function (obj, ...args) {
+    return (...args2) => {
+        return this.call(obj, ...args, ...args2)
     }
 }
